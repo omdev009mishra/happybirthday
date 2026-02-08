@@ -26,7 +26,11 @@ if u only know loss i'd show you what there is to gain beczz falling in love ins
 soo my beautiful angel my favorite start in the sky when u meet heaven u will think it is hell and you will sit in your car and cry but anything worth doing is worth being afraid to do.
 
 i asked god what his favorite creation was
-he gave me a picture of you ❤️`
+he gave me a picture of you ❤️
+
+Find me when your family hurts you. Find me when your friends let you down. Find me when the world feels too heavy to carry alone. When your heart feels like it is breaking, when you are tired of being strong, when silence gets loud and no one seems to hear you -
+Find me. I will always be here, no matter what. I will not promise to fix everything, but I promise you will not face it alone. I will sit with you in the dark, I will remind you of your light, and I will try my best to bring back your smile, piece by piece. You are never a burden to me.
+Okay?`
 
 const galleryCards = [
   { id: 1, title: 'Photo 1', img: photo1 },
