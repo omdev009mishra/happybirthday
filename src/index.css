@@ -61,6 +61,7 @@ body {
   border: 1px solid rgba(255,192,200,0.5);
 }
 
+
 .card-title {
   font-family: 'Pacifico', 'Poppins', sans-serif;
   color: #c72a61;
@@ -290,13 +291,64 @@ body {
   will-change: transform;
 }
 
-.center-card .card-content {
-  transform: translateZ(0px);
-  transition: transform 400ms cubic-bezier(.2,.9,.2,1);
+/* Final card flip */
+.final-content.final-flip {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 700ms cubic-bezier(.2,.8,.2,1);
 }
 
-.center-card.tilted {
-  box-shadow: 0 30px 70px rgba(10,10,10,0.12);
+.final-content.final-flip.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.final-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.final-front {
+  position: relative;
+}
+
+.final-back {
+  transform: rotateY(180deg);
+  text-align: left;
+  padding: 8px 4px 0;
+}
+
+.final-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.card-back-title {
+  font-family: 'Pacifico', 'Poppins', sans-serif;
+  color: #c72a61;
+  font-size: 30px;
+  margin-bottom: 16px;
+}
+
+.card-back-text {
+  color: #7a2540;
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.card-back-hint {
+  margin-top: 18px;
+  font-size: 12px;
+  color: #ad5174;
+  opacity: 0.8;
+  text-align: center;
 }
 
 .sparkle {
@@ -746,6 +798,8 @@ body {
 
 .letter-body p {
   margin: 0 0 18px;
+  opacity: 0;
+  animation: fadeInUp 700ms ease-out forwards;
 }
 
 .letter-actions {
@@ -754,4 +808,52 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 18px;
+}
+
+.thanks-top-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 90;
+  background: linear-gradient(90deg, #ff7aa7, #ff5fa3);
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(255, 95, 163, 0.35);
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.thanks-top-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 95, 163, 0.45);
+}
+
+/* Sparkle overlay */
+.sparkle-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.sparkle-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 182, 193, 0.7) 45%, rgba(255, 105, 180, 0.2) 70%, transparent 100%);
+  box-shadow: 0 0 16px rgba(255, 182, 193, 0.6);
+  animation-name: sparkleTwinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  opacity: 0.4;
+}
+
+@keyframes sparkleTwinkle {
+  0% { transform: scale(0.6); opacity: 0.2; }
+  40% { transform: scale(1.1); opacity: 0.9; }
+  100% { transform: scale(0.7); opacity: 0.3; }
 }

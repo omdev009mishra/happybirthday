@@ -15,22 +15,52 @@ I hope your day is as beautiful and amazing as your heart is. Here’s to you, y
 
 I love you more than words can say. Have the best day ever! ❤️`
 
-const letterMessage = `if you're only lived in hell i'd become heaven for u. even if i had to build a staircase to get there. i would do anything for u. if you'wre only ever know silence i'd be the Crescendo that kis.. you awake. i would be the endless supply of love that reminds u it doesn't always just take.
+const backMessage = `Find me when your family hurts you. Find me when your friends let you down. Find me when the world feels too heavy to carry alone. When your heart feels like it’s breaking, when you’re tired of being strong, when silence gets loud and no one seems to hear you—
+Find me. I’ll always be here, no matter what. I won’t promise to fix everything, but I promise you won’t face it alone. I’ll sit with you in the dark, I’ll remind you of your light,
+and I’ll try my best to bring back your smile, piece by piece. You’re never a burden to me.
+Okay?`
 
-if u were only met sorrow i'd introduced you to great joy. if u were only know confusion i'd give only honesty for you to enjoy bczz shadow hide hurt but they dont take hurt away.
+const letterMessage = `if you're only lived in hell i'd become heaven for u. even if i had to build a staircase to get there. i would do anything for u. if you're only ever known silence i'd be the crescendo that kisses you awake. i would be the endless supply of love that reminds u it doesn't always just take.
 
-it isnt alwsy sunny but i will convince your light to stay. if u only ever lived half hearted i would review the other half with the same neuronal impulse that changed my brain chemistry with your laugh.
+if u were only met sorrow i'd introduce you to great joy. if u were only known confusion i'd give only honesty for you to enjoy because shadows hide hurt but they don't take hurt away.
 
-if u only know loss i'd show you what there is to gain beczz falling in love insnt always one sided or in vain. if u indulge in fearful thinking how about a taste of hope bczz happy endings for hopeless romantics will always be my favorite tope.
+it isn't always sunny but i will convince your light to stay. if u only ever lived half hearted i would review the other half with the same neuronal impulse that changed my brain chemistry with your laugh.
 
-soo my beautiful angel my favorite start in the sky when u meet heaven u will think it is hell and you will sit in your car and cry but anything worth doing is worth being afraid to do.
+if u only know loss i'd show you what there is to gain because falling in love isn't always one sided or in vain. if u indulge in fearful thinking how about a taste of hope because happy endings for hopeless romantics will always be my favorite topic.
+
+so my beautiful angel my favorite star in the sky when u meet heaven u will think it is hell and you will sit in your car and cry but anything worth doing is worth being afraid to do.
 
 i asked god what his favorite creation was
-he gave me a picture of you ❤️
+he gave me a picture of you ❤️`
 
-Find me when your family hurts you. Find me when your friends let you down. Find me when the world feels too heavy to carry alone. When your heart feels like it is breaking, when you are tired of being strong, when silence gets loud and no one seems to hear you -
-Find me. I will always be here, no matter what. I will not promise to fix everything, but I promise you will not face it alone. I will sit with you in the dark, I will remind you of your light, and I will try my best to bring back your smile, piece by piece. You are never a burden to me.
-Okay?`
+const thanksMessage = `Thank you for being in my life.
+
+For every smile you bring, every calm you give, and every moment you turn into something beautiful - I am grateful.
+
+You make my world lighter, my heart fuller, and my days brighter. I will always cherish you, care for you, and stand by you.
+
+Thank you for being you. ❤️`
+
+const sparkleItems = Array.from({ length: 14 })
+
+function SparkleLayer() {
+  return (
+    <div className="sparkle-layer" aria-hidden>
+      {sparkleItems.map((_, index) => (
+        <span
+          key={`sparkle-${index}`}
+          className="sparkle-dot"
+          style={{
+            left: `${(index * 7 + 12) % 90}%`,
+            top: `${(index * 13 + 8) % 90}%`,
+            animationDelay: `${index * 180}ms`,
+            animationDuration: `${2400 + index * 120}ms`
+          }}
+        />
+      ))}
+    </div>
+  )
+}
 
 const galleryCards = [
   { id: 1, title: 'Photo 1', img: photo1 },
@@ -59,9 +89,11 @@ export default function App() {
   const [popupTyping, setPopupTyping] = useState('')
   const [popupImage, setPopupImage] = useState('')
   const [keysPressed, setKeysPressed] = useState('')
+  const [isFlipped, setIsFlipped] = useState(false)
   const cardRef = useRef(null)
   const rafRef = useRef(null)
   const pointer = useRef({ x: 0, y: 0 })
+  const letterConfettiRef = useRef(0)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -252,9 +284,45 @@ export default function App() {
     }, 1800)
   }
 
+  const handleThanksPageTransition = () => {
+    setTransitioning(true)
+    setTransitionMessage('A grateful note, just for you...')
+    setTimeout(() => {
+      setPage('thanks')
+      setTransitioning(false)
+    }, 1600)
+  }
+
+  const triggerLetterConfetti = () => {
+    confetti({
+      particleCount: 70,
+      spread: 80,
+      origin: { y: 0.7 },
+      colors: ['#ff89a9', '#ffb6c1', '#ffc0cb', '#ff69b4', '#ff1493']
+    })
+  }
+
+  useEffect(() => {
+    if (page !== 'letter') return
+    const onWheel = () => {
+      const now = Date.now()
+      if (now - letterConfettiRef.current < 450) return
+      letterConfettiRef.current = now
+      confetti({
+        particleCount: 30,
+        spread: 60,
+        origin: { y: 0.4 },
+        colors: ['#ffb6c1', '#ffc0cb', '#ff69b4']
+      })
+    }
+    window.addEventListener('wheel', onWheel, { passive: true })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [page])
+
   if (loading) {
     return (
       <div className="loading-screen">
+        <SparkleLayer />
         <div className="loading-content">
           <h1 className="loading-title">Happy Birthday, Yashi! 🎉</h1>
           <div className="loading-spinner"></div>
@@ -267,6 +335,7 @@ export default function App() {
   if (transitioning) {
     return (
       <div className="loading-screen">
+        <SparkleLayer />
         <div className="loading-content">
           <div className="loading-heart">💖</div>
           <p className="loading-text">{transitionMessage}</p>
@@ -286,43 +355,66 @@ export default function App() {
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 2000);
       }}>
-        <div className="final-content">
-          <div className="final-decoration sparkle" onClick={(e) => {
-            e.stopPropagation();
-            confetti({
-              particleCount: 50,
-              spread: 60,
-              origin: { x: 0.5, y: 0.4 },
-              colors: ['#ff89a9', '#ffb6c1', '#ffc0cb', '#ff69b4']
-            });
-          }}>✨</div>
-          <h1 className="final-title">My Dearest Yashi,</h1>
-          <div className="final-message">
-            <p>Thank you for being the light in my life, for every smile, every laugh, and every beautiful moment we've shared together.</p>
-            <p>I want you to know that no matter where life takes us, no matter what challenges we face, I am always with you. In your joys and in your struggles, in your dreams and in your reality.</p>
-            <p>Your happiness means the world to me, and I promise to always stand by your side, supporting you, cherishing you, and loving you with all my heart.</p>
-            <p className="final-love interactive-heart" onClick={(e) => {
+        <SparkleLayer />
+        <button className="thanks-top-btn" onClick={(e) => {
+          e.stopPropagation()
+          handleThanksPageTransition()
+        }}>Thank you for being in my life</button>
+        <div
+          className={`final-content final-flip ${isFlipped ? 'is-flipped' : ''}`}
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsFlipped((prev) => !prev)
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="final-face final-front">
+            <div className="final-decoration sparkle" onClick={(e) => {
               e.stopPropagation();
               confetti({
-                particleCount: 100,
-                spread: 80,
-                origin: { x: 0.5, y: 0.6 },
-                colors: ['#ff1493', '#ff69b4', '#ffc0cb']
+                particleCount: 50,
+                spread: 60,
+                origin: { x: 0.5, y: 0.4 },
+                colors: ['#ff89a9', '#ffb6c1', '#ffc0cb', '#ff69b4']
               });
-            }}>I love you more than words could ever express. ❤️</p>
-            <p className="final-signature">— With all my love,<br/>Pranjal Mishra</p>
+            }}>✨</div>
+            <h1 className="final-title">My Dearest Yashi,</h1>
+            <div className="final-message">
+              <p>Thank you for being the light in my life, for every smile, every laugh, and every beautiful moment we've shared together.</p>
+              <p>I want you to know that no matter where life takes us, no matter what challenges we face, I am always with you. In your joys and in your struggles, in your dreams and in your reality.</p>
+              <p>Your happiness means the world to me, and I promise to always stand by your side, supporting you, cherishing you, and loving you with all my heart.</p>
+              <p className="final-love interactive-heart" onClick={(e) => {
+                e.stopPropagation();
+                confetti({
+                  particleCount: 100,
+                  spread: 80,
+                  origin: { x: 0.5, y: 0.6 },
+                  colors: ['#ff1493', '#ff69b4', '#ffc0cb']
+                });
+              }}>I love you more than words could ever express. ❤️</p>
+              <p className="final-signature">— With all my love,<br/>Pranjal Mishra</p>
+            </div>
+            <div className="final-decoration sparkle" onClick={(e) => {
+              e.stopPropagation();
+              confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { x: 0.5, y: 0.6 },
+                colors: ['#ff89a9', '#ffb6c1', '#ffc0cb', '#ff69b4']
+              });
+            }}>✨</div>
+            <div className="final-actions">
+              <button className="final-back-btn" onClick={() => setPage('gallery')}>← Back to Gallery</button>
+              <button className="final-back-btn" onClick={handleLetterPageTransition}>One More Page →</button>
+            </div>
+            <p className="card-back-hint">Tap to flip</p>
           </div>
-          <div className="final-decoration sparkle" onClick={(e) => {
-            e.stopPropagation();
-            confetti({
-              particleCount: 50,
-              spread: 60,
-              origin: { x: 0.5, y: 0.6 },
-              colors: ['#ff89a9', '#ffb6c1', '#ffc0cb', '#ff69b4']
-            });
-          }}>✨</div>
-          <button className="final-back-btn" onClick={() => setPage('gallery')}>← Back to Gallery</button>
-          <button className="final-back-btn" onClick={handleLetterPageTransition}>One More Page →</button>
+          <div className="final-face final-back">
+            <h2 className="card-back-title">For You, Always</h2>
+            <p className="card-back-text">{backMessage}</p>
+            <p className="card-back-hint">Tap to flip back</p>
+          </div>
         </div>
       </div>
     )
@@ -330,12 +422,33 @@ export default function App() {
 
   if (page === 'letter') {
     return (
-      <div className="letter-page">
+      <div className="letter-page" onClick={triggerLetterConfetti}>
+        <SparkleLayer />
         <div className="letter-content">
           <h1 className="letter-title">For You, Always</h1>
           <div className="letter-body">
             {letterMessage.split('\n').map((line, index) => (
-              <p key={index}>{line}</p>
+              <p key={index} style={{ animationDelay: `${index * 90}ms` }}>{line}</p>
+            ))}
+          </div>
+          <div className="letter-actions">
+            <button className="final-back-btn" onClick={() => setPage('final')}>← Back</button>
+            <button className="final-back-btn" onClick={() => setPage('gallery')}>Back to Gallery</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (page === 'thanks') {
+    return (
+      <div className="letter-page" onClick={triggerLetterConfetti}>
+        <SparkleLayer />
+        <div className="letter-content">
+          <h1 className="letter-title">Thank You</h1>
+          <div className="letter-body">
+            {thanksMessage.split('\n').map((line, index) => (
+              <p key={index} style={{ animationDelay: `${index * 90}ms` }}>{line}</p>
             ))}
           </div>
           <div className="letter-actions">
@@ -350,6 +463,7 @@ export default function App() {
   if (page === 'gallery') {
     return (
       <div className="gallery-page">
+        <SparkleLayer />
         <button className="back-button" onClick={() => setPage('home')}>← Back</button>
         <button className="final-button" onClick={handleFinalPageTransition}>A Special Message 💌</button>
 
@@ -395,6 +509,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative">
+      <SparkleLayer />
       <div className="bg-3d" aria-hidden>
         <div role="button" tabIndex={0} onClick={() => triggerRain('❤️')} className="bg-3d-item big" style={{ left: '6%', top: '12%', transform: 'translateZ(120px)' }}>❤️</div>
         <div role="button" tabIndex={0} onClick={() => triggerRain('🌸')} className="bg-3d-item" style={{ left: '18%', top: '30%', transform: 'translateZ(60px)' }}>🌸</div>
@@ -404,7 +519,7 @@ export default function App() {
         <div role="button" tabIndex={0} onClick={() => triggerRain('🌼')} className="bg-3d-item" style={{ left: '60%', top: '38%', transform: 'translateZ(50px)' }}>🌼</div>
       </div>
 
-      <div ref={cardRef} className="center-card card-content" onDoubleClick={handleCardDoubleClick}>
+      <div ref={cardRef} className="center-card" onDoubleClick={handleCardDoubleClick}>
         <div className="text-center">
           <h1 className="card-title">Happy Birthday, Yashi!</h1>
           <p className="card-sub mt-2">A little note for you:</p>
@@ -418,7 +533,6 @@ export default function App() {
             <button className="cta" onClick={handleGalleryTransition}>Next Somthing spacial</button>
           </div>
         </div>
-        {/* Emoji droplets (rain) */}
         {droplets.map((d) => (
           <div
             key={d.id}
