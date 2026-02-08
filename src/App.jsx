@@ -15,6 +15,19 @@ I hope your day is as beautiful and amazing as your heart is. Here’s to you, y
 
 I love you more than words can say. Have the best day ever! ❤️`
 
+const letterMessage = `if you're only lived in hell i'd become heaven for u. even if i had to build a staircase to get there. i would do anything for u. if you'wre only ever know silence i'd be the Crescendo that kis.. you awake. i would be the endless supply of love that reminds u it doesn't always just take.
+
+if u were only met sorrow i'd introduced you to great joy. if u were only know confusion i'd give only honesty for you to enjoy bczz shadow hide hurt but they dont take hurt away.
+
+it isnt alwsy sunny but i will convince your light to stay. if u only ever lived half hearted i would review the other half with the same neuronal impulse that changed my brain chemistry with your laugh.
+
+if u only know loss i'd show you what there is to gain beczz falling in love insnt always one sided or in vain. if u indulge in fearful thinking how about a taste of hope bczz happy endings for hopeless romantics will always be my favorite tope.
+
+soo my beautiful angel my favorite start in the sky when u meet heaven u will think it is hell and you will sit in your car and cry but anything worth doing is worth being afraid to do.
+
+i asked god what his favorite creation was
+he gave me a picture of you ❤️`
+
 const galleryCards = [
   { id: 1, title: 'Photo 1', img: photo1 },
   { id: 2, title: 'Photo 2', img: photo2 },
@@ -226,6 +239,15 @@ export default function App() {
     }, 2500)
   }
 
+  const handleLetterPageTransition = () => {
+    setTransitioning(true)
+    setTransitionMessage('One more thing, just for you...')
+    setTimeout(() => {
+      setPage('letter')
+      setTransitioning(false)
+    }, 1800)
+  }
+
   if (loading) {
     return (
       <div className="loading-screen">
@@ -296,6 +318,26 @@ export default function App() {
             });
           }}>✨</div>
           <button className="final-back-btn" onClick={() => setPage('gallery')}>← Back to Gallery</button>
+          <button className="final-back-btn" onClick={handleLetterPageTransition}>One More Page →</button>
+        </div>
+      </div>
+    )
+  }
+
+  if (page === 'letter') {
+    return (
+      <div className="letter-page">
+        <div className="letter-content">
+          <h1 className="letter-title">For You, Always</h1>
+          <div className="letter-body">
+            {letterMessage.split('\n').map((line, index) => (
+              <p key={index}>{line}</p>
+            ))}
+          </div>
+          <div className="letter-actions">
+            <button className="final-back-btn" onClick={() => setPage('final')}>← Back</button>
+            <button className="final-back-btn" onClick={() => setPage('gallery')}>Back to Gallery</button>
+          </div>
         </div>
       </div>
     )
