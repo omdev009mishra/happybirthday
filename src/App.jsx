@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import confetti from 'canvas-confetti'
 import photo1 from './assets/photo/yashiphoto (1).jpg'
 import photo2 from './assets/photo/yashiphoto (2).jpg'
 import photo3 from './assets/photo/yashiphoto (3).jpg'
@@ -591,6 +592,15 @@ export default function App() {
 
             <div className="mt-6 text-center">
               <button className="cta" onClick={handleGalleryTransition}>Next Somthing spacial</button>
+            </div>
+            <div className="party-popper">
+              <button
+                type="button"
+                className="party-popper-button"
+                onClick={triggerMagic}
+              >
+                🎉 Party popper
+              </button>
             </div>
             <div className="music-toggle">
               <button
