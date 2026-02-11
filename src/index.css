@@ -97,6 +97,24 @@ body {
   cursor: pointer;
 }
 
+.music-toggle {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 90;
+}
+
+.music-toggle-button {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 120, 167, 0.35);
+  background: #fff;
+  color: #a03a5f;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(197, 57, 105, 0.15);
+}
+
 /* Typing effect styles */
 .typing {
   white-space: pre-wrap;

@@ -8,6 +8,10 @@ import photo6 from './assets/photo/yashiphoto (6).jpg'
 import photo7 from './assets/photo/yashiphoto (7).jpg'
 import photo8 from './assets/photo/yashiphoto (8).jpg'
 import photo9 from './assets/photo/yashiphoto (9).jpg'
+import song1 from './assets/songs/Chaand Baaliyan Aditya A 320 Kbps.mp3'
+import song2 from './assets/songs/Edd_Sheeran_-_Perfect_(mp3.pm).mp3'
+import song3 from './assets/songs/ed_shiran_-_photograph_(mp3.pm).mp3'
+import song4 from './assets/songs/nastelbom-happy-birthday-469282.mp3'
 
 const message = `I wanted to take a moment to tell you how incredibly special you are to me. You bring so much light and happiness into my life, and I feel so lucky to have you by my side.
 
@@ -74,6 +78,13 @@ const galleryCards = [
   { id: 9, title: 'Photo 9', img: photo9 }
 ]
 
+const songTracks = [
+  { id: 1, title: 'nastelbom-happy-birthday-469282', src: song4 },
+  { id: 2, title: 'Chaand Baaliyan Aditya A 320 Kbps', src: song1 },
+  { id: 3, title: 'Edd_Sheeran_-_Perfect_(mp3.pm)', src: song2 },
+  { id: 4, title: 'ed_shiran_-_photograph_(mp3.pm)', src: song3 }
+]
+
 export default function App() {
   const [text, setText] = useState('')
   const [activeFlood, setActiveFlood] = useState(null)
@@ -90,8 +101,11 @@ export default function App() {
   const [popupImage, setPopupImage] = useState('')
   const [keysPressed, setKeysPressed] = useState('')
   const [isFlipped, setIsFlipped] = useState(false)
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(true)
   const cardRef = useRef(null)
   const rafRef = useRef(null)
+  const audioRef = useRef(null)
   const pointer = useRef({ x: 0, y: 0 })
   const letterConfettiRef = useRef(0)
 
@@ -158,6 +172,48 @@ export default function App() {
       setKeysPressed('')
     }
   }, [keysPressed])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    if (isPlaying) {
+      const playPromise = audio.play()
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => setIsPlaying(false))
+      }
+    } else {
+      audio.pause()
+    }
+  }, [isPlaying])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    const tryStart = () => {
+      if (isPlaying) return
+      setIsPlaying(true)
+      const playPromise = audio.play()
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => setIsPlaying(false))
+      }
+    }
+
+    window.addEventListener('pointerdown', tryStart, { once: true })
+    return () => window.removeEventListener('pointerdown', tryStart)
+  }, [isPlaying])
+
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    audio.load()
+    if (isPlaying) {
+      const playPromise = audio.play()
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => setIsPlaying(false))
+      }
+    }
+  }, [currentTrackIndex])
 
   const triggerMagic = () => {
     confetti({
@@ -261,6 +317,7 @@ export default function App() {
     setTransitioning(true)
     setTransitionMessage('Loading your memories...')
     setTimeout(() => {
+      setCurrentTrackIndex(3)
       setPage('gallery')
       setTransitioning(false)
     }, 2000)
@@ -270,6 +327,7 @@ export default function App() {
     setTransitioning(true)
     setTransitionMessage('Opening my heart to you...')
     setTimeout(() => {
+      setCurrentTrackIndex(2)
       setPage('final')
       setTransitioning(false)
     }, 2500)
@@ -288,6 +346,7 @@ export default function App() {
     setTransitioning(true)
     setTransitionMessage('A grateful note, just for you...')
     setTimeout(() => {
+      setCurrentTrackIndex(1)
       setPage('thanks')
       setTransitioning(false)
     }, 1600)
@@ -319,8 +378,20 @@ export default function App() {
     return () => window.removeEventListener('wheel', onWheel)
   }, [page])
 
+  const audioElement = (
+    <audio
+      ref={audioRef}
+      src={songTracks[currentTrackIndex].src}
+      autoPlay
+      loop
+      preload="auto"
+    />
+  )
+
+  let content = null
+
   if (loading) {
-    return (
+    content = (
       <div className="loading-screen">
         <SparkleLayer />
         <div className="loading-content">
@@ -330,10 +401,8 @@ export default function App() {
         </div>
       </div>
     )
-  }
-
-  if (transitioning) {
-    return (
+  } else if (transitioning) {
+    content = (
       <div className="loading-screen">
         <SparkleLayer />
         <div className="loading-content">
@@ -342,10 +411,8 @@ export default function App() {
         </div>
       </div>
     )
-  }
-
-  if (page === 'final') {
-    return (
+  } else if (page === 'final') {
+    content = (
       <div className="final-page" onClick={(e) => {
         const heart = document.createElement('div');
         heart.className = 'floating-emoji';
@@ -418,10 +485,8 @@ export default function App() {
         </div>
       </div>
     )
-  }
-
-  if (page === 'letter') {
-    return (
+  } else if (page === 'letter') {
+    content = (
       <div className="letter-page" onClick={triggerLetterConfetti}>
         <SparkleLayer />
         <div className="letter-content">
@@ -438,10 +503,8 @@ export default function App() {
         </div>
       </div>
     )
-  }
-
-  if (page === 'thanks') {
-    return (
+  } else if (page === 'thanks') {
+    content = (
       <div className="letter-page" onClick={triggerLetterConfetti}>
         <SparkleLayer />
         <div className="letter-content">
@@ -458,10 +521,8 @@ export default function App() {
         </div>
       </div>
     )
-  }
-
-  if (page === 'gallery') {
-    return (
+  } else if (page === 'gallery') {
+    content = (
       <div className="gallery-page">
         <SparkleLayer />
         <button className="back-button" onClick={() => setPage('home')}>← Back</button>
@@ -505,45 +566,61 @@ export default function App() {
         )}
       </div>
     )
+  } else {
+    content = (
+      <div className="min-h-screen flex items-center justify-center p-6 relative">
+        <SparkleLayer />
+        <div className="bg-3d" aria-hidden>
+          <div role="button" tabIndex={0} onClick={() => triggerRain('❤️')} className="bg-3d-item big" style={{ left: '6%', top: '12%', transform: 'translateZ(120px)' }}>❤️</div>
+          <div role="button" tabIndex={0} onClick={() => triggerRain('🌸')} className="bg-3d-item" style={{ left: '18%', top: '30%', transform: 'translateZ(60px)' }}>🌸</div>
+          <div role="button" tabIndex={0} onClick={() => triggerRain('😊')} className="bg-3d-item small" style={{ left: '36%', top: '8%', transform: 'translateZ(40px)' }}>😊</div>
+          <div role="button" tabIndex={0} onClick={() => triggerRain('🌺')} className="bg-3d-item" style={{ right: '14%', top: '24%', transform: 'translateZ(80px)' }}>🌺</div>
+          <div role="button" tabIndex={0} onClick={() => triggerRain('💫')} className="bg-3d-item small" style={{ right: '6%', top: '6%', transform: 'translateZ(100px)' }}>💫</div>
+          <div role="button" tabIndex={0} onClick={() => triggerRain('🌼')} className="bg-3d-item" style={{ left: '60%', top: '38%', transform: 'translateZ(50px)' }}>🌼</div>
+        </div>
+
+        <div ref={cardRef} className="center-card" onDoubleClick={handleCardDoubleClick}>
+          <div className="text-center">
+            <h1 className="card-title">Happy Birthday, Yashi!</h1>
+            <p className="card-sub mt-2">A little note for you:</p>
+
+            <div className="mt-6 text-left typing" aria-live="polite">
+              {text}
+              <span className="caret" />
+            </div>
+
+            <div className="mt-6 text-center">
+              <button className="cta" onClick={handleGalleryTransition}>Next Somthing spacial</button>
+            </div>
+            <div className="music-toggle">
+              <button
+                type="button"
+                className="music-toggle-button"
+                onClick={() => setIsPlaying(prev => !prev)}
+              >
+                {isPlaying ? 'Pause music' : 'Play music'}
+              </button>
+            </div>
+          </div>
+          {droplets.map((d) => (
+            <div
+              key={d.id}
+              className="droplet"
+              style={{ left: d.left, fontSize: d.size, animationDelay: `${d.delay}ms` }}
+              aria-hidden
+            >
+              {d.emoji}
+            </div>
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative">
-      <SparkleLayer />
-      <div className="bg-3d" aria-hidden>
-        <div role="button" tabIndex={0} onClick={() => triggerRain('❤️')} className="bg-3d-item big" style={{ left: '6%', top: '12%', transform: 'translateZ(120px)' }}>❤️</div>
-        <div role="button" tabIndex={0} onClick={() => triggerRain('🌸')} className="bg-3d-item" style={{ left: '18%', top: '30%', transform: 'translateZ(60px)' }}>🌸</div>
-        <div role="button" tabIndex={0} onClick={() => triggerRain('😊')} className="bg-3d-item small" style={{ left: '36%', top: '8%', transform: 'translateZ(40px)' }}>😊</div>
-        <div role="button" tabIndex={0} onClick={() => triggerRain('🌺')} className="bg-3d-item" style={{ right: '14%', top: '24%', transform: 'translateZ(80px)' }}>🌺</div>
-        <div role="button" tabIndex={0} onClick={() => triggerRain('💫')} className="bg-3d-item small" style={{ right: '6%', top: '6%', transform: 'translateZ(100px)' }}>💫</div>
-        <div role="button" tabIndex={0} onClick={() => triggerRain('🌼')} className="bg-3d-item" style={{ left: '60%', top: '38%', transform: 'translateZ(50px)' }}>🌼</div>
-      </div>
-
-      <div ref={cardRef} className="center-card" onDoubleClick={handleCardDoubleClick}>
-        <div className="text-center">
-          <h1 className="card-title">Happy Birthday, Yashi!</h1>
-          <p className="card-sub mt-2">A little note for you:</p>
-
-          <div className="mt-6 text-left typing" aria-live="polite">
-            {text}
-            <span className="caret" />
-          </div>
-
-          <div className="mt-6 text-center">
-            <button className="cta" onClick={handleGalleryTransition}>Next Somthing spacial</button>
-          </div>
-        </div>
-        {droplets.map((d) => (
-          <div
-            key={d.id}
-            className="droplet"
-            style={{ left: d.left, fontSize: d.size, animationDelay: `${d.delay}ms` }}
-            aria-hidden
-          >
-            {d.emoji}
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      {audioElement}
+      {content}
+    </>
   )
 }
