@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react'
-import confetti from 'canvas-confetti'
-import photo1 from './assets/photo/yashiphoto (1).jpg'
-import photo2 from './assets/photo/yashiphoto (2).jpg'
-import photo3 from './assets/photo/yashiphoto (3).jpg'
-import photo4 from './assets/photo/yashiphoto (4).jpg'
-import photo5 from './assets/photo/yashiphoto (5).jpg'
+import React, { useEffect, useState, useRef } from 'react';
+import Login from './Login';
+import confetti from 'canvas-confetti';
+import photo1 from './assets/photo/yashiphoto (1).jpg';
+import photo2 from './assets/photo/yashiphoto (2).jpg';
+import photo3 from './assets/photo/yashiphoto (3).jpg';
+import photo4 from './assets/photo/yashiphoto (4).jpg';
+import photo5 from './assets/photo/yashiphoto (5).jpg';
 import photo6 from './assets/photo/yashiphoto (6).jpg'
 import photo7 from './assets/photo/yashiphoto (7).jpg'
 import photo8 from './assets/photo/yashiphoto (8).jpg'
@@ -86,7 +87,7 @@ const songTracks = [
   { id: 4, title: 'ed_shiran_-_photograph_(mp3.pm)', src: song3 }
 ]
 
-export default function App() {
+function App() {
   const [text, setText] = useState('')
   const [activeFlood, setActiveFlood] = useState(null)
   const [droplets, setDroplets] = useState([])
@@ -109,6 +110,7 @@ export default function App() {
   const audioRef = useRef(null)
   const pointer = useRef({ x: 0, y: 0 })
   const letterConfettiRef = useRef(0)
+  const [userEmail, setUserEmail] = useState(null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -116,6 +118,25 @@ export default function App() {
     }, 2000)
     return () => clearTimeout(timer)
   }, [])
+
+  const handleLogin = (email) => {
+    localStorage.setItem('userEmail', email);
+    setTransitioning(true);
+    setTransitionMessage(`Welcome to the celebration! 🎉`);
+
+    // Celebratory confetti blast
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#ff89a9', '#ffb6c1', '#ffc0cb', '#ff69b4', '#ff1493']
+    });
+
+    setTimeout(() => {
+      setUserEmail(email);
+      setTransitioning(false);
+    }, 2000);
+  };
 
   useEffect(() => {
     let i = 0
@@ -401,7 +422,7 @@ export default function App() {
           <p className="loading-text">Preparing something special for you...</p>
         </div>
       </div>
-    )
+    );
   } else if (transitioning) {
     content = (
       <div className="loading-screen">
@@ -411,7 +432,9 @@ export default function App() {
           <p className="loading-text">{transitionMessage}</p>
         </div>
       </div>
-    )
+    );
+  } else if (!userEmail) {
+    content = <Login onLogin={handleLogin} />;
   } else if (page === 'final') {
     content = (
       <div className="final-page" onClick={(e) => {
@@ -461,7 +484,7 @@ export default function App() {
                   colors: ['#ff1493', '#ff69b4', '#ffc0cb']
                 });
               }}>I love you more than words could ever express. ❤️</p>
-              <p className="final-signature">— With all my love,<br/>Pranjal Mishra</p>
+              <p className="final-signature">— With all my love,<br />Pranjal Mishra</p>
             </div>
             <div className="final-decoration sparkle" onClick={(e) => {
               e.stopPropagation();
@@ -552,7 +575,7 @@ export default function App() {
             </div>
           </div>
         </div>
-        
+
         {popupVisible && (
           <div className="popup-overlay" onClick={() => setPopupVisible(false)}>
             <div className="popup-card" onClick={(e) => e.stopPropagation()}>
@@ -629,8 +652,10 @@ export default function App() {
 
   return (
     <>
-      {audioElement}
+      {!loading && audioElement}
       {content}
     </>
-  )
+  );
 }
+
+export default App;

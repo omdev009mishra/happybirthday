@@ -891,3 +891,235 @@ body {
   40% { transform: scale(1.1); opacity: 0.9; }
   100% { transform: scale(0.7); opacity: 0.3; }
 }
+
+@media (max-width: 900px) {
+  .final-content {
+    padding: 48px 36px;
+  }
+
+  .letter-content {
+    padding: 46px 36px 40px;
+  }
+
+  .final-title {
+    font-size: 42px;
+  }
+
+  .final-message {
+    font-size: 18px;
+  }
+
+  .letter-title {
+    font-size: 38px;
+  }
+
+  .letter-body {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .center-card {
+    margin: 0 12px;
+    padding: 22px 20px;
+  }
+
+  .card-title {
+    font-size: 32px;
+  }
+
+  .card-sub {
+    font-size: 14px;
+  }
+
+  .typing {
+    font-size: 15px;
+    min-height: 120px;
+  }
+
+  .balloon {
+    width: 46px;
+    height: 60px;
+    font-size: 22px;
+  }
+
+  .music-toggle {
+    left: 12px;
+    bottom: 12px;
+  }
+
+  .music-toggle-button,
+  .back-button,
+  .final-button,
+  .thanks-top-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .gallery-stage {
+    perspective: 1000px;
+  }
+
+  .ring-card {
+    width: 290px;
+    height: 190px;
+  }
+
+  .ring-card-title {
+    font-size: 12px;
+  }
+
+  .popup-card {
+    padding: 30px 24px;
+  }
+
+  .popup-typing {
+    font-size: 16px;
+  }
+
+  .loading-title {
+    font-size: 32px;
+  }
+
+  .loading-heart {
+    font-size: 64px;
+  }
+
+  .final-page,
+  .letter-page {
+    padding: 32px 16px;
+  }
+
+  .final-content {
+    padding: 38px 26px;
+  }
+
+  .final-title {
+    font-size: 36px;
+  }
+
+  .final-message {
+    font-size: 17px;
+  }
+
+  .final-love {
+    font-size: 24px;
+  }
+
+  .final-signature {
+    font-size: 20px;
+  }
+
+  .letter-content {
+    padding: 36px 26px 32px;
+  }
+
+  .letter-title {
+    font-size: 32px;
+  }
+
+  .letter-body {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 480px) {
+  .center-card {
+    margin: 0 10px;
+    padding: 18px 16px;
+  }
+
+  .card-title {
+    font-size: 28px;
+  }
+
+  .typing {
+    font-size: 14px;
+    min-height: 110px;
+  }
+
+  .ring-card {
+    width: 230px;
+    height: 160px;
+  }
+
+  .popup-card {
+    padding: 24px 18px;
+  }
+
+  .popup-typing {
+    font-size: 15px;
+  }
+
+  .loading-title {
+    font-size: 26px;
+  }
+
+  .loading-text {
+    font-size: 14px;
+  }
+
+  .final-page,
+  .letter-page {
+    padding: 24px 12px;
+  }
+
+  .final-content {
+    padding: 30px 20px;
+  }
+
+  .final-title {
+    font-size: 30px;
+  }
+
+  .final-message {
+    font-size: 16px;
+  }
+
+  .final-love {
+    font-size: 22px;
+  }
+
+  .final-signature {
+    font-size: 18px;
+  }
+
+  .letter-content {
+    padding: 30px 20px 26px;
+  }
+
+  .letter-title {
+    font-size: 28px;
+  }
+
+  .letter-body {
+    font-size: 16px;
+  }
+}
+
+/* Custom Animations for Cute Login */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+  50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite;
+}
+
+@keyframes gradient-x {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-x {
+  animation: gradient-x 3s ease infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
